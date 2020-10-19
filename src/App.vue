@@ -1,6 +1,15 @@
 <template>
   <div>
     <myheader></myheader>
+    寿命：<input type="text" v-model="life">
+    <button @click="clear()">clear</button>
+    成長タイプ：
+    <select v-model="selected">
+      <option v-for="data in options" v-bind:value="data.value" :key="data.text">{{ data.text }}</option>
+    </select>
+    <p style="display:none">
+      成長適正：すべてＣ（未実装）、能力値：すべて１２０（未実装）
+    </p>
     <p v-if="life.length > 0">
         <span>寿命：{{ life }}</span><br>
         <span>成長タイプ: {{ grow_stages[selected].type }}</span>
@@ -8,22 +17,16 @@
           <tbody>
             <tr v-for="(value,index) in grow_stages[selected].value" v-bind:key="index">
               <td>{{ grow_stage_names[index] }}</td>
-              <td>{{ life*value/100 }}</td>
+              <td>{{ Math.floor(life*value/100) }}</td>
             </tr>
           </tbody>
         </table>
-        
-        <span>※成長タイプの端数処理は未実装です</span>
+        <span>黄金モモ：{{ culcpeach(true) }}</span><br>
+        <span>白銀モモ：{{ culcpeach(false) }}</span><br>
+        <span>※成長タイプの端数処理は未実装です(取り急ぎ丸めただけです)</span>
     </p>
     <p v-else>
       (寿命が入力されていません))
-    </p>
-    <input type="text" v-model="life">
-    <button @click="clear()">clear</button>
-    <p>
-      <select v-model="selected">
-        <option v-for="data in options" v-bind:value="data.value" :key="data.text">{{ data.text }}</option>
-      </select>
     </p>
   </div>
 </template>
@@ -48,7 +51,7 @@ export default {
       ],
       // 成長段階。ローカル（略
       grow_stages: [
-        { type:"早熟", value: [0,5,10,20,30,35,40,55,70,80] },
+        { type:"早熟", value : [0,5,10,20,30,35,40,55,70,80] },
         { type:"持続", value : [0,5,10,20,30,40,45,60,75,85] },
         { type:"普通", value : [0,10,20,35,50,60,65,75,80,85] },
         { type:"晩成", value : [0,15,30,45,60,70,80,85,90,95] }
@@ -60,6 +63,23 @@ export default {
   methods: {
     clear () {
       this.life = ''
+    },
+    // 延命アイテム計算用。どうせ黄金モモか白銀モモしかないので手抜き
+    culcpeach (isGold) {
+      var life=25;
+      if(isGold) life=50;
+
+      var peak1=(this.grow_stages[this.selected].value[5]*this.life/100)-(this.grow_stages[this.selected].value[4]*this.life/100);
+      if(peak1 > life) return "ピーク："+life;
+      else var return_msg="ピーク："+peak1;
+      life-=peak1;
+      var peak2=(this.grow_stages[this.selected].value[6]*this.life/100)-(this.grow_stages[this.selected].value[5]*this.life/100);
+      if(peak2 > life) return "、準ピーク："+life;
+      else return_msg+="、準ピーク："+peak2;
+      life-=peak2;
+      return_msg+="、第4段階："+life;
+
+      return return_msg;
     },
   }
 }
