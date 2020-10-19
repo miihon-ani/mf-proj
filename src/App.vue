@@ -5,7 +5,7 @@
     <button @click="clear()">clear</button>
     成長タイプ：
     <select v-model="selected">
-      <option v-for="data in options" v-bind:value="data.value" :key="data.text">{{ data.text }}</option>
+      <option v-for="data in grow_type" v-bind:value="data.value" :key="data.text">{{ data.text }}</option>
     </select>
     <p style="display:none">
       成長適正：すべてＣ（未実装）、能力値：すべて１２０（未実装）
@@ -33,6 +33,7 @@
 
 <script>
 import myheader from './components/myheader'
+import grow_type from '../assets/grow_type.json'
 
 export default {
   components: {
@@ -42,14 +43,9 @@ export default {
     return {
       life: '300',
       selected: '2',
-      // selectboxの中身。ローカルストレージにjsonで入れたい気がしている。
-      options: [
-        { text: '早熟', value: '0' },
-        { text: '持続', value: '1' },
-        { text: '普通', value: '2' },
-        { text: '晩成', value: '3' },
-      ],
-      // 成長段階。ローカル（略
+      // 成長タイプ。selectboxの中身。
+      grow_type: grow_type ,
+      // 成長段階。後でローカルjsonにする
       grow_stages: [
         { type:"早熟", value : [0,5,10,20,30,35,40,55,70,80,100] },
         { type:"持続", value : [0,5,10,20,30,40,45,60,75,85,100] },
