@@ -1,20 +1,20 @@
 <template>
   <div>
     <myheader></myheader>
-    寿命：<input type="text" v-model="life">
+    寿命：<input v-model="life" type="text" />
     <button @click="clear()">clear</button>
     成長タイプ：
     <select v-model="selected">
       <option v-for="data in grow_type" v-bind:value="data.value" :key="data.text">{{ data.text }}</option>
     </select>
-    <p style="display:none">
+    <p style="display: none">
       成長適正：すべてＣ（未実装）、能力値：すべて１２０（未実装）
     </p>
     <p v-if="life.length > 0">
         <span>成長タイプ: {{ grow_stages[selected].type }}</span>
         <table>
           <tbody>
-            <tr v-for="(value,index) in grow_stages[selected].value" v-bind:key="index">
+            <tr v-for="(value,index) in grow_stages[selected].value" :key="index">
               <td>{{ grow_stage_names[index] }}</td>
               <td>{{ culcStage(index) }}</td>
             </tr>
@@ -39,7 +39,7 @@ export default {
   components: {
     myheader
   },
-  data () {
+  data() {
     return {
       life: '300',
       selected: '2',
@@ -57,8 +57,8 @@ export default {
     }
   },
   methods: {
-    clear () {
-      this.life = ''
+    clear() {
+      this.life = '';
     },
     // 延命アイテム計算用。どうせ黄金モモか白銀モモしかないので手抜き
     culcPeach (isGold) {
@@ -90,5 +90,5 @@ export default {
       return Math.floor(this.grow_stages[this.selected].value[stage]*this.life/100);
     },
   }
-}
+};
 </script>
