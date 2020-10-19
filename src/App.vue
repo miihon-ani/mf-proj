@@ -1,7 +1,7 @@
 <template>
   <div>
     <myheader></myheader>
-    寿命：<input type="text" v-model="life">
+    寿命：<input v-model="life" type="text" />
     <button @click="clear()">clear</button>
     成長タイプ：
     <select v-model="selected">
@@ -44,7 +44,7 @@ export default {
   components: {
     myheader
   },
-  data () {
+  data() {
     return {
       life: '300',
       selected: '2',
@@ -75,8 +75,8 @@ export default {
     }
   },
   methods: {
-    clear () {
-      this.life = ''
+    clear() {
+      this.life = '';
     },
     // 延命アイテム計算用。どうせ黄金モモか白銀モモしかないので手抜き
     // todo:ピーク・準ピーク・４段階を配列で返すように変更する
@@ -127,5 +127,5 @@ export default {
       return average(this.trainning_light[stage].value);
     }
   }
-}
+};
 </script>
