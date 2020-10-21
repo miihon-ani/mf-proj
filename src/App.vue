@@ -95,7 +95,7 @@
       </thead>
       <tbody>
         <tr v-for="(value, index) in grow_stages[grow_type].value" :key="index">
-          <td>{{ grow_stage_names[index] }}</td>
+          <td @click="changeStair(index)">{{ grow_stage_names[index] }}</td>
           <td>{{ culcStage(index) }}</td>
           <td v-if="index < 10">{{ culcStageWeek(index) }}</td>
           <td v-else></td>
@@ -103,6 +103,64 @@
           <td v-else></td>
           <td v-if="index < 10">{{ culcTrainHeavyAverageAll(index) }}</td>
           <td v-else></td>
+        </tr>
+      </tbody>
+    </table>
+    <table v-if="lifespan.length > 0">
+      <thead>
+        <tr>
+          <td>トレーニング</td>
+          <td colspan="3">
+            <select v-model="stair">
+              <option
+                v-for="(item, index) in grow_stage_names"
+                :key="hoge"
+                :value="index"
+              >
+                {{ item }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ドミノ倒し</td>
+          <td>{{ culcTrainLight(stair, pow_apt) }}</td>
+          <td>しゃてき</td>
+          <td>{{ culcTrainLight(stair, ski_apt) }}</td>
+        </tr>
+        <tr>
+          <td>猛勉強</td>
+          <td>{{ culcTrainLight(stair, int_apt) }}</td>
+          <td>巨石よけ</td>
+          <td>{{ culcTrainLight(stair, spd_apt) }}</td>
+        </tr>
+        <tr>
+          <td>走り込み</td>
+          <td>{{ culcTrainLight(stair, lif_apt) }}</td>
+          <td>丸太受け</td>
+          <td>{{ culcTrainLight(stair, def_apt) }}</td>
+        </tr>
+        <tr>
+          <td>重り引き</td>
+          <td>
+            {{ culcTrainHeavyCombi(stair, pow_apt, lif_apt) }}
+          </td>
+          <td>変動ゆか</td>
+          <td>
+            {{ culcTrainHeavyCombi(stair, spd_apt, int_apt) }}
+          </td>
+        </tr>
+        <tr>
+          <td>めいそう</td>
+          <td>
+            {{ culcTrainHeavyCombi(stair, int_apt, ski_apt) }}
+          </td>
+          <td>プール</td>
+          <td>
+            {{ culcTrainHeavyCombi(stair, def_apt, lif_apt) }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -125,6 +183,7 @@ export default {
       // 各種初期値定義
       lifespan: '300',
       grow_type: '2',
+      stair: '0',
       lif_apt: '2',
       pow_apt: '2',
       int_apt: '2',
@@ -181,6 +240,13 @@ export default {
     };
   },
   methods: {
+    // 段階変更
+    changeStair(stage) {
+      if (stage > 10) return 'えらー';
+      if (stage < 0) return 'えらー';
+      this.stair = stage;
+      return true;
+    },
     // 延命アイテム計算
     culcPeach(isGold) {
       let extend = 25; // 白銀モモ
@@ -285,7 +351,7 @@ export default {
     culcTrainHeavyAverageAll(stage) {
       return [
         this.culcTrainHeavyAverage(stage, this.pow_apt, this.lif_apt), // 重り引き
-        this.culcTrainHeavyAverage(stage, this.spd_apt, this.int_apt), // 移動ゆか
+        this.culcTrainHeavyAverage(stage, this.spd_apt, this.int_apt), // 変動ゆか
         this.culcTrainHeavyAverage(stage, this.int_apt, this.ski_apt), // めいそう
         this.culcTrainHeavyAverage(stage, this.def_apt, this.lif_apt) // プール
       ];
