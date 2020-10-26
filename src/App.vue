@@ -1,423 +1,85 @@
 <template>
   <div>
     <myheader></myheader>
-    寿命：<input v-model="lifespan" type="text" />
+    寿命：<input v-model="main.lifespan" type="number" />
     成長タイプ：
-    <select v-model="grow_type">
+    <select v-model="main.grow_type">
       <option v-for="(data, index) in grow_stages" :key="index" :value="index">
-        {{ data.type }}
-      </option>
-    </select>
-    成長厳選：
-    <select v-model="selection">
-      <option v-for="(data, index) in grow_stages" :key="index" :value="index">
-        {{ data.type }}
+        {{ data }}
       </option>
     </select>
     <p>
       成長適正：ライフ
-      <select v-model="lif_apt">
-        <option
-          v-for="(data, index) in training_heavy_main"
-          :key="index"
-          :value="index"
-        >
-          {{ data.type }}
+      <select v-model="main.lif_apt">
+        <option v-for="(data, index) in apititude" :key="index" :value="index">
+          {{ data }}
         </option>
       </select>
       ちから
-      <select v-model="pow_apt">
-        <option
-          v-for="(data, index) in training_heavy_main"
-          :key="index"
-          :value="index"
-        >
-          {{ data.type }}
+      <select v-model="main.pow_apt">
+        <option v-for="(data, index) in apititude" :key="index" :value="index">
+          {{ data }}
         </option>
       </select>
       かしこさ
-      <select v-model="int_apt">
-        <option
-          v-for="(data, index) in training_heavy_main"
-          :key="index"
-          :value="index"
-        >
-          {{ data.type }}
+      <select v-model="main.int_apt">
+        <option v-for="(data, index) in apititude" :key="data" :value="index">
+          {{ data }}
         </option>
       </select>
       命中
-      <select v-model="ski_apt">
-        <option
-          v-for="(data, index) in training_heavy_main"
-          :key="index"
-          :value="index"
-        >
-          {{ data.type }}
+      <select v-model="main.ski_apt">
+        <option v-for="(data, index) in apititude" :key="index" :value="index">
+          {{ data }}
         </option>
       </select>
       回避
-      <select v-model="spd_apt">
-        <option
-          v-for="(data, index) in training_heavy_main"
-          :key="index"
-          :value="index"
-        >
-          {{ data.type }}
+      <select v-model="main.spd_apt">
+        <option v-for="(data, index) in apititude" :key="index" :value="index">
+          {{ data }}
         </option>
       </select>
       丈夫さ
-      <select v-model="def_apt">
-        <option
-          v-for="(data, index) in training_heavy_main"
-          :key="index"
-          :value="index"
-        >
-          {{ data.type }}
+      <select v-model="main.def_apt">
+        <option v-for="(data, index) in apititude" :key="index" :value="index">
+          {{ data }}
         </option>
       </select>
     </p>
-    <p v-if="lifespan.length > 0">
-      <span>黄金モモ：{{ culcPeach(true) }}</span>
-      <br />
-      <span>白銀モモ：{{ culcPeach(false) }}</span>
-    </p>
-    <table v-if="lifespan.length > 0">
-      <thead>
-        <tr>
-          <td>成長段階</td>
-          <td>寿命カウント値</td>
-          <td>段階滞在週</td>
-          <td>軽トレ上昇期待値</td>
-          <td>重トレ上昇期待値</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(value, index) in grow_stage_names" :key="index">
-          <td @click="changeStair(index)">{{ grow_stage_names[index] }}</td>
-          <td>{{ culcStage(index) }}</td>
-          <td>{{ culcStageWeek(index) }}</td>
-          <td>{{ culcTrainLightAverageAll(index) }}</td>
-          <td>{{ culcTrainHeavyAverageAll(index) }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <table v-if="lifespan.length > 0">
-      <thead>
-        <tr>
-          <td>トレーニング</td>
-          <td colspan="3">
-            <select v-model="stair">
-              <option
-                v-for="(item, index) in grow_stage_names"
-                :key="index"
-                :value="index"
-              >
-                {{ item }}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>ドミノ倒し</td>
-          <td>しゃてき</td>
-        </tr>
-        <tr>
-          <td>{{ culcTrainLight(stair, pow_apt) }}</td>
-          <td>{{ culcTrainLight(stair, ski_apt) }}</td>
-        </tr>
-        <tr>
-          <td>猛勉強</td>
-          <td>巨石よけ</td>
-        </tr>
-        <tr>
-          <td>{{ culcTrainLight(stair, int_apt) }}</td>
-          <td>{{ culcTrainLight(stair, spd_apt) }}</td>
-        </tr>
-        <tr>
-          <td>走り込み</td>
-          <td>丸太受け</td>
-        </tr>
-        <tr>
-          <td>{{ culcTrainLight(stair, lif_apt) }}</td>
-          <td>{{ culcTrainLight(stair, def_apt) }}</td>
-        </tr>
-        <tr>
-          <td>重り引き</td>
-          <td>変動ゆか</td>
-        </tr>
-        <tr>
-          <td>
-            {{ culcTrainHeavyCombi(stair, pow_apt, lif_apt) }}
-          </td>
-          <td>
-            {{ culcTrainHeavyCombi(stair, spd_apt, int_apt) }}
-          </td>
-        </tr>
-        <tr>
-          <td>めいそう</td>
-          <td>プール</td>
-        </tr>
-        <tr>
-          <td>
-            {{ culcTrainHeavyCombi(stair, int_apt, ski_apt) }}
-          </td>
-          <td>
-            {{ culcTrainHeavyCombi(stair, def_apt, lif_apt) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p v-else>(寿命が入力されていません))</p>
+    <training :main="main"></training>
   </div>
 </template>
 
 <script>
 import myheader from './components/myheader';
+import training from './components/training';
 
 export default {
   components: {
-    myheader
+    myheader,
+    training
   },
   data() {
     return {
       // 各種初期値定義
-      lifespan: '300',
-      grow_type: '2',
-      selection: '0',
-      stair: '0',
-      lif_apt: '2',
-      pow_apt: '2',
-      int_apt: '2',
-      ski_apt: '2',
-      spd_apt: '2',
-      def_apt: '2',
+      main: {
+        lifespan: '300',
+        grow_type: 2,
+        selection: 0,
+        stair: 0,
+        lif_apt: 2,
+        pow_apt: 2,
+        int_apt: 2,
+        ski_apt: 2,
+        spd_apt: 2,
+        def_apt: 2
+      },
       // 成長パターン
-      training_heavy_main: [
-        { type: 'A', value: [9, 14, 18, 22, 23, 23] },
-        { type: 'B', value: [8, 11, 15, 18, 22, 21] },
-        { type: 'C', value: [6, 9, 12, 14, 17, 16] },
-        { type: 'D', value: [5, 7, 9, 11, 14, 13] },
-        { type: 'E', value: [4, 5, 7, 8, 10, 9] }
-      ],
-      training_heavy_sub: [
-        { type: 'A', value: [4, 5, 7, 8, 10, 10] },
-        { type: 'B', value: [3, 5, 6, 7, 9, 8] },
-        { type: 'C', value: [3, 4, 5, 6, 7, 6] },
-        { type: 'D', value: [2, 3, 4, 4, 5, 5] },
-        { type: 'E', value: [2, 2, 3, 3, 4, 4] }
-      ],
-      trainning_light: [
-        { type: 'A', value: [6, 9, 12, 14, 17, 16] },
-        { type: 'B', value: [5, 7, 10, 11, 14, 13] },
-        { type: 'C', value: [4, 6, 8, 9, 11, 10] },
-        { type: 'D', value: [3, 5, 6, 7, 9, 8] },
-        { type: 'E', value: [3, 4, 5, 5, 7, 6] }
-      ],
+      apititude: ['A', 'B', 'C', 'D', 'E'],
       // 成長段階
-      grow_stages: [
-        { type: '早熟', value: [0, 5, 10, 20, 30, 35, 40, 55, 70, 80, 100] },
-        { type: '持続', value: [0, 5, 10, 20, 30, 40, 45, 60, 75, 85, 100] },
-        { type: '普通', value: [0, 10, 20, 35, 50, 60, 65, 75, 80, 85, 100] },
-        { type: '晩成', value: [0, 15, 30, 45, 60, 70, 80, 85, 90, 95, 100] }
-      ],
-      // 成長段階の名前
-      grow_stage_names: [
-        '第1段階',
-        '第2段階',
-        '第3段階',
-        '第4段階',
-        'ピーク',
-        '準ピーク',
-        '第5段階',
-        '第6段階',
-        '第7段階',
-        '第8段階'
-      ]
+      grow_stages: ['早熟', '持続', '普通', '晩成']
     };
   },
-  methods: {
-    // 段階変更
-    changeStair(stage) {
-      if (stage > 10) return 'えらー';
-      if (stage < 0) return 'えらー';
-      this.stair = stage;
-      return true;
-    },
-    // 延命アイテム計算
-    culcPeach(isGold) {
-      let extend = 25; // 白銀モモ
-      if (isGold) extend = 50; // 黄金モモ
-
-      const peak1 = this.culcStageWeek(4); // ピーク
-      const peak2 = this.culcStageWeek(5); // 準ピーク
-
-      if (peak1 > extend) return [extend, 0, 0];
-      extend -= peak1;
-      if (peak2 > extend) return [peak1, extend, 0];
-      extend -= peak2;
-      return [peak1, peak2, extend];
-    },
-    // 段階に滞在する週
-    culcStageWeek(stage) {
-      if (stage > 9) return 'えらー';
-      if (stage < 0) return 'えらー';
-      return this.culcStage(stage + 1) - this.culcStage(stage);
-    },
-    // 段階に達する寿命カウント値
-    culcStage(stage) {
-      if (stage > 10) return 'えらー';
-      if (stage < 0) return 'えらー';
-      return Math.floor(
-        this.grow_stages[this.grow_type].value[stage] * (this.lifespan / 100)
-      );
-    },
-    // 重トレ用（コンビネーションセット）
-    culcTrainHeavyCombi(stage, aptitude_main, aptitude_sub) {
-      if (stage > 9) return 'えらー';
-      if (stage < 0) return 'えらー';
-      if (stage >= 6) stage = 9 - stage;
-
-      const heavyMain = function (val) {
-        return Math.min(Math.max(val, 3), 20);
-      };
-      const heavySub = function (val) {
-        return Math.max(val, 2);
-      };
-
-      // パターン1：
-      const combi1 = [
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage] - 1),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage]),
-        -2
-      ];
-      // パターン2
-      const combi2 = [
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage]),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage] - 3),
-        -3
-      ];
-      // パターン3：
-      const combi3 = [
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage] - 2),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage] - 1),
-        -3
-      ];
-      // パターン4：
-      const combi4 = [
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage] - 3),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage] - 2),
-        -2
-      ];
-
-      let ret_array = [combi1, combi2, combi3, combi4];
-      for (let i = 0; i < this.selection; i++) {
-        ret_array.pop();
-      }
-      return ret_array;
-    },
-    // 重トレ用
-    culcTrainHeavy(stage, aptitude_main, aptitude_sub) {
-      if (stage > 9) return 'えらー';
-      if (stage < 0) return 'えらー';
-      if (stage >= 6) stage = 9 - stage;
-
-      const heavyMain = function (val) {
-        return Math.min(Math.max(val, 3), 20);
-      };
-      const heavySub = function (val) {
-        return Math.max(val, 2);
-      };
-
-      // メイン
-      const main = [
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage] - 1),
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage]),
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage] - 2),
-        heavyMain(this.training_heavy_main[aptitude_main].value[stage] - 3)
-      ];
-      // パターン2：
-      const sub = [
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage]),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage] - 3),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage] - 1),
-        heavySub(this.training_heavy_sub[aptitude_sub].value[stage] - 2)
-      ];
-      // パターン3：
-      const minus = [-2, -3, -2, -3];
-      for (let i = 0; i < this.selection; i++) {
-        main.pop();
-        sub.pop();
-        minus.pop();
-      }
-
-      return [main, sub, minus];
-    },
-    // 重トレ平均値（全部）
-    culcTrainHeavyAverageAll(stage) {
-      return [
-        this.culcTrainHeavyAverage(stage, this.pow_apt, this.lif_apt), // 重り引き
-        this.culcTrainHeavyAverage(stage, this.spd_apt, this.int_apt), // 変動ゆか
-        this.culcTrainHeavyAverage(stage, this.int_apt, this.ski_apt), // めいそう
-        this.culcTrainHeavyAverage(stage, this.def_apt, this.lif_apt) // プール
-      ];
-    },
-    // 重トレ平均値（単体）
-    culcTrainHeavyAverage(stage, aptitude_main, aptitude_sub) {
-      const values = this.culcTrainHeavy(stage, aptitude_main, aptitude_sub);
-      return [
-        this.culcArrayAverage(values[0]),
-        this.culcArrayAverage(values[1]),
-        this.culcArrayAverage(values[2])
-      ];
-    },
-    // 軽トレ用
-    culcTrainLight(stage, aptitude) {
-      if (stage > 9) return 'えらー';
-      if (stage < 0) return 'えらー';
-      if (stage >= 6) stage = 9 - stage;
-
-      const light = function (val) {
-        return Math.min(Math.max(val, 1), 15);
-      };
-
-      const value1 = light(this.trainning_light[aptitude].value[stage]);
-      const value2 = light(this.trainning_light[aptitude].value[stage] - 1);
-      const value3 = light(this.trainning_light[aptitude].value[stage] - 2);
-      const value4 = light(this.trainning_light[aptitude].value[stage] - 3);
-
-      let ret_array = [value1, value2, value3, value4];
-      for (let i = 0; i < this.selection; i++) {
-        ret_array.pop();
-      }
-      return ret_array;
-    },
-    // 軽トレ平均値
-    culcTrainLightAverageAll(stage) {
-      return [
-        this.culcArrayAverage(this.culcTrainLight(stage, this.lif_apt)),
-        this.culcArrayAverage(this.culcTrainLight(stage, this.pow_apt)),
-        this.culcArrayAverage(this.culcTrainLight(stage, this.int_apt)),
-        this.culcArrayAverage(this.culcTrainLight(stage, this.ski_apt)),
-        this.culcArrayAverage(this.culcTrainLight(stage, this.spd_apt)),
-        this.culcArrayAverage(this.culcTrainLight(stage, this.def_apt))
-      ];
-    },
-    // 配列の平均値を返す
-    culcArrayAverage(array) {
-      const sum = function (arr) {
-        let sum = 0;
-        arr.forEach(function (elm) {
-          sum += elm;
-        });
-        return sum;
-      };
-      const average = function (arr) {
-        return Math.round((sum(arr) / arr.length) * 100) / 100;
-      };
-      return average(array);
-    }
-  }
+  methods: {}
 };
 </script>
