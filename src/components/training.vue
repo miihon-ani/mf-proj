@@ -135,25 +135,9 @@ export default {
   data() {
     return {
       // 初期設定
-      stair: 0,
+      stair: 4,
       trainingData: trainingData,
-      skilled: {
-        domino: 0,
-        shoot: 0,
-        study: 0,
-        dodge: 0,
-        run: 0,
-        endure: 0,
-        pull: 0,
-        leap: 0,
-        meditate: 0,
-        swim: 0,
-        papas: 0,
-        mandy: 0,
-        parepare: 0,
-        torble: 0,
-        kawrea: 0
-      },
+      skilled: {},
       // 成長段階
       grow_stages: [
         { type: '早熟', value: [0, 5, 10, 20, 30, 35, 40, 55, 70, 80, 100] },
@@ -336,6 +320,10 @@ export default {
 
       let return_array = [value1, value2, value3, value4];
       return return_array;
+    },
+    // プリセット反映用（親から呼ばれる）
+    setSkilled(objSkilled) {
+      this.skilled = objSkilled;
     }
   }
 };
