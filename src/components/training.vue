@@ -179,8 +179,9 @@ export default {
       if (stage > 10) return 'えらー';
       if (stage < 0) return 'えらー';
       return Math.floor(
-        (this.grow_stages[this.main.grow_type].value[stage] / 100) *
-          this.main.lifespan
+        (this.grow_stages[this.main.grow_type].value[stage] *
+          this.main.lifespan) /
+          100
       );
     },
     // 重り引き
