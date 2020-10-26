@@ -35,60 +35,84 @@
       </thead>
       <tbody>
         <tr>
-          <td>ドミノ倒し</td>
-          <td>しゃてき</td>
-        </tr>
-        <tr>
-          <td>{{ culcTrainLight(stair, main.aptitude.pow) }}</td>
-          <td>{{ culcTrainLight(stair, main.aptitude.ski) }}</td>
-        </tr>
-        <tr>
-          <td>猛勉強</td>
-          <td>巨石よけ</td>
-        </tr>
-        <tr>
-          <td>{{ culcTrainLight(stair, main.aptitude.int) }}</td>
-          <td>{{ culcTrainLight(stair, main.aptitude.spd) }}</td>
-        </tr>
-        <tr>
-          <td>走り込み</td>
-          <td>丸太受け</td>
-        </tr>
-        <tr>
-          <td>{{ culcTrainLight(stair, main.aptitude.lif) }}</td>
-          <td>{{ culcTrainLight(stair, main.aptitude.def) }}</td>
-        </tr>
-        <tr>
-          <td>重り引き</td>
-          <td>変動ゆか</td>
-        </tr>
-        <tr>
           <td>
-            {{
-              culcTrainHeavyCombi(stair, main.aptitude.pow, main.aptitude.lif)
-            }}
+            ドミノ倒し
+            <input type="checkbox" v-model="skilled.domino" />
+            <label>得意</label>
           </td>
           <td>
-            {{
-              culcTrainHeavyCombi(stair, main.aptitude.spd, main.aptitude.int)
-            }}
+            しゃてき
+            <input type="checkbox" v-model="skilled.shoot" />
+            <label>得意</label>
           </td>
         </tr>
         <tr>
-          <td>めいそう</td>
-          <td>プール</td>
+          <td>{{ trainingDomino(stair) }}</td>
+          <td>{{ trainingShoot(stair) }}</td>
         </tr>
         <tr>
           <td>
-            {{
-              culcTrainHeavyCombi(stair, main.aptitude.int, main.aptitude.ski)
-            }}
+            猛勉強
+            <input type="checkbox" v-model="skilled.study" />
+            <label>得意</label>
           </td>
           <td>
-            {{
-              culcTrainHeavyCombi(stair, main.aptitude.def, main.aptitude.lif)
-            }}
+            巨石よけ
+            <input type="checkbox" v-model="skilled.dodge" />
+            <label>得意</label>
           </td>
+        </tr>
+        <tr>
+          <td>{{ trainingStudy(stair) }}</td>
+          <td>{{ trainingDodge(stair) }}</td>
+        </tr>
+        <tr>
+          <td>
+            走り込み
+            <input type="checkbox" v-model="skilled.run" />
+            <label>得意</label>
+          </td>
+          <td>
+            丸太うけ
+            <input type="checkbox" v-model="skilled.endure" />
+            <label>得意</label>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ trainingRun(stair) }}</td>
+          <td>{{ trainingEndure(stair) }}</td>
+        </tr>
+        <tr>
+          <td>
+            重り引き
+            <input type="checkbox" v-model="skilled.pull" />
+            <label>得意</label>
+          </td>
+          <td>
+            変動ゆか
+            <input type="checkbox" v-model="skilled.leap" />
+            <label>得意</label>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ trainingPull(stair) }}</td>
+          <td>{{ trainingLeap(stair) }}</td>
+        </tr>
+        <tr>
+          <td>
+            めいそう
+            <input type="checkbox" v-model="skilled.meditate" />
+            <label>得意</label>
+          </td>
+          <td>
+            プール
+            <input type="checkbox" v-model="skilled.swim" />
+            <label>得意</label>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ trainingMeditate(stair) }}</td>
+          <td>{{ trainingSwim(stair) }}</td>
         </tr>
       </tbody>
     </table>
@@ -101,12 +125,35 @@ import trainingData from '../../assets/training.json';
 
 export default {
   name: 'Training',
-  props: ['main'],
+  props: {
+    main: {
+      type: Object,
+      required: false,
+      default: new Object()
+    }
+  },
   data() {
     return {
       // 初期設定
       stair: 0,
       trainingData: trainingData,
+      skilled: {
+        domino: 0,
+        shoot: 0,
+        study: 0,
+        dodge: 0,
+        run: 0,
+        endure: 0,
+        pull: 0,
+        leap: 0,
+        meditate: 0,
+        swim: 0,
+        papas: 0,
+        mandy: 0,
+        parepare: 0,
+        torble: 0,
+        kawrea: 0
+      },
       // 成長段階
       grow_stages: [
         { type: '早熟', value: [0, 5, 10, 20, 30, 35, 40, 55, 70, 80, 100] },
@@ -152,8 +199,44 @@ export default {
           this.main.lifespan
       );
     },
-    // 重トレ用（コンビネーションセット）
-    culcTrainHeavyCombi(stage, aptitude_main, aptitude_sub) {
+    // 重り引き
+    trainingPull(stage) {
+      return this.culcTrainHeavy(
+        stage,
+        this.main.aptitude.pow,
+        this.main.aptitude.lif,
+        this.skilled.pull
+      );
+    },
+    // 変動ゆか
+    trainingLeap(stage) {
+      return this.culcTrainHeavy(
+        stage,
+        this.main.aptitude.spd,
+        this.main.aptitude.int,
+        this.skilled.leap
+      );
+    },
+    // めいそう
+    trainingMeditate(stage) {
+      return this.culcTrainHeavy(
+        stage,
+        this.main.aptitude.int,
+        this.main.aptitude.ski,
+        this.skilled.meditate
+      );
+    },
+    // プール
+    trainingSwim(stage) {
+      return this.culcTrainHeavy(
+        stage,
+        this.main.aptitude.def,
+        this.main.aptitude.lif,
+        this.skilled.swim
+      );
+    },
+    // 重トレ用
+    culcTrainHeavy(stage, aptitude_main, aptitude_sub, skilled) {
       if (stage > 9) return 'えらー';
       if (stage < 0) return 'えらー';
       if (stage >= 6) stage = 9 - stage;
@@ -164,28 +247,77 @@ export default {
       const training_heavy_main = Object.values(
         trainingData.training_heavy_main
       );
-      const main_maxup = training_heavy_main[aptitude_main][stage];
+      let main_maxup = training_heavy_main[aptitude_main][stage];
 
       const heavySub = function (val) {
         return Math.max(val, 2);
       };
       const training_heavy_sub = Object.values(trainingData.training_heavy_sub);
-      const sub_maxup = training_heavy_sub[aptitude_sub][stage];
+      let sub_maxup = training_heavy_sub[aptitude_sub][stage];
 
-      // パターン1：
-      const combi1 = [heavyMain(main_maxup - 1), heavySub(sub_maxup), -2];
-      // パターン2
-      const combi2 = [heavyMain(main_maxup), heavySub(sub_maxup - 3), -3];
-      // パターン3：
+      if (skilled) {
+        main_maxup += 1;
+        sub_maxup += 1;
+      }
+
+      const combi1 = [heavyMain(main_maxup), heavySub(sub_maxup - 3), -3];
+      const combi2 = [heavyMain(main_maxup - 1), heavySub(sub_maxup), -2];
       const combi3 = [heavyMain(main_maxup - 2), heavySub(sub_maxup - 1), -3];
-      // パターン4：
       const combi4 = [heavyMain(main_maxup - 3), heavySub(sub_maxup - 2), -2];
 
-      let ret_array = [combi2, combi1, combi3, combi4];
-      return ret_array;
+      let return_array = [combi1, combi2, combi3, combi4];
+      return return_array;
+    },
+    // ドミノ倒し
+    trainingDomino(stage) {
+      return this.culcTrainLight(
+        stage,
+        this.main.aptitude.pow,
+        this.skilled.domino
+      );
+    },
+    // しゃてき
+    trainingShoot(stage) {
+      return this.culcTrainLight(
+        stage,
+        this.main.aptitude.ski,
+        this.skilled.shoot
+      );
+    },
+    // 猛勉強
+    trainingStudy(stage) {
+      return this.culcTrainLight(
+        stage,
+        this.main.aptitude.int,
+        this.skilled.study
+      );
+    },
+    // 巨石よけ
+    trainingDodge(stage) {
+      return this.culcTrainLight(
+        stage,
+        this.main.aptitude.spd,
+        this.skilled.dodge
+      );
+    },
+    // 走り込み
+    trainingRun(stage) {
+      return this.culcTrainLight(
+        stage,
+        this.main.aptitude.lif,
+        this.skilled.run
+      );
+    },
+    // 丸太うけ
+    trainingEndure(stage) {
+      return this.culcTrainLight(
+        stage,
+        this.main.aptitude.def,
+        this.skilled.endure
+      );
     },
     // 軽トレ用
-    culcTrainLight(stage, aptitude) {
+    culcTrainLight(stage, aptitude, skilled) {
       if (stage > 9) return 'えらー';
       if (stage < 0) return 'えらー';
       if (stage >= 6) stage = 9 - stage;
@@ -194,15 +326,16 @@ export default {
         return Math.min(Math.max(val, 1), 15);
       };
       const trainning_light = Object.values(trainingData.trainning_light);
-      const maxup = trainning_light[aptitude][stage];
+      let maxup = trainning_light[aptitude][stage];
+      if (skilled) maxup += 1;
 
       const value1 = light(maxup);
       const value2 = light(maxup - 1);
       const value3 = light(maxup - 2);
       const value4 = light(maxup - 3);
 
-      let ret_array = [value1, value2, value3, value4];
-      return ret_array;
+      let return_array = [value1, value2, value3, value4];
+      return return_array;
     }
   }
 };
