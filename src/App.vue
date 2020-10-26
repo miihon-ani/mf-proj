@@ -4,44 +4,44 @@
     寿命：<input v-model="main.lifespan" type="number" />
     成長タイプ：
     <select v-model="main.grow_type">
-      <option v-for="(data, index) in grow_stages" :key="index" :value="index">
+      <option v-for="(data, index) in type" :key="index" :value="index">
         {{ data }}
       </option>
     </select>
     <p>
       成長適正：ライフ
-      <select v-model="main.lif_apt">
-        <option v-for="(data, index) in apititude" :key="index" :value="index">
+      <select v-model="main.aptitude.lif">
+        <option v-for="(data, index) in pattern" :key="index" :value="index">
           {{ data }}
         </option>
       </select>
       ちから
-      <select v-model="main.pow_apt">
-        <option v-for="(data, index) in apititude" :key="index" :value="index">
+      <select v-model="main.aptitude.pow">
+        <option v-for="(data, index) in pattern" :key="index" :value="index">
           {{ data }}
         </option>
       </select>
       かしこさ
-      <select v-model="main.int_apt">
-        <option v-for="(data, index) in apititude" :key="data" :value="index">
+      <select v-model="main.aptitude.int">
+        <option v-for="(data, index) in pattern" :key="data" :value="index">
           {{ data }}
         </option>
       </select>
       命中
-      <select v-model="main.ski_apt">
-        <option v-for="(data, index) in apititude" :key="index" :value="index">
+      <select v-model="main.aptitude.ski">
+        <option v-for="(data, index) in pattern" :key="index" :value="index">
           {{ data }}
         </option>
       </select>
       回避
-      <select v-model="main.spd_apt">
-        <option v-for="(data, index) in apititude" :key="index" :value="index">
+      <select v-model="main.aptitude.spd">
+        <option v-for="(data, index) in pattern" :key="index" :value="index">
           {{ data }}
         </option>
       </select>
       丈夫さ
-      <select v-model="main.def_apt">
-        <option v-for="(data, index) in apititude" :key="index" :value="index">
+      <select v-model="main.aptitude.def">
+        <option v-for="(data, index) in pattern" :key="index" :value="index">
           {{ data }}
         </option>
       </select>
@@ -61,23 +61,25 @@ export default {
   },
   data() {
     return {
-      // 各種初期値定義
+      // 各種初期値(子に引き渡す用)
       main: {
         lifespan: '300',
         grow_type: 2,
         selection: 0,
         stair: 0,
-        lif_apt: 2,
-        pow_apt: 2,
-        int_apt: 2,
-        ski_apt: 2,
-        spd_apt: 2,
-        def_apt: 2
+        aptitude: {
+          lif: 2,
+          pow: 2,
+          int: 2,
+          ski: 2,
+          spd: 2,
+          def: 2
+        }
       },
-      // 成長パターン
-      apititude: ['A', 'B', 'C', 'D', 'E'],
-      // 成長段階
-      grow_stages: ['早熟', '持続', '普通', '晩成']
+      // 成長適性
+      pattern: ['A', 'B', 'C', 'D', 'E'],
+      // 成長タイプ
+      type: ['早熟', '持続', '普通', '晩成']
     };
   },
   methods: {}

@@ -39,24 +39,24 @@
           <td>しゃてき</td>
         </tr>
         <tr>
-          <td>{{ culcTrainLight(stair, main.pow_apt) }}</td>
-          <td>{{ culcTrainLight(stair, main.ski_apt) }}</td>
+          <td>{{ culcTrainLight(stair, main.aptitude.pow) }}</td>
+          <td>{{ culcTrainLight(stair, main.aptitude.ski) }}</td>
         </tr>
         <tr>
           <td>猛勉強</td>
           <td>巨石よけ</td>
         </tr>
         <tr>
-          <td>{{ culcTrainLight(stair, main.int_apt) }}</td>
-          <td>{{ culcTrainLight(stair, main.spd_apt) }}</td>
+          <td>{{ culcTrainLight(stair, main.aptitude.int) }}</td>
+          <td>{{ culcTrainLight(stair, main.aptitude.spd) }}</td>
         </tr>
         <tr>
           <td>走り込み</td>
           <td>丸太受け</td>
         </tr>
         <tr>
-          <td>{{ culcTrainLight(stair, main.lif_apt) }}</td>
-          <td>{{ culcTrainLight(stair, main.def_apt) }}</td>
+          <td>{{ culcTrainLight(stair, main.aptitude.lif) }}</td>
+          <td>{{ culcTrainLight(stair, main.aptitude.def) }}</td>
         </tr>
         <tr>
           <td>重り引き</td>
@@ -64,10 +64,14 @@
         </tr>
         <tr>
           <td>
-            {{ culcTrainHeavyCombi(stair, main.pow_apt, main.lif_apt) }}
+            {{
+              culcTrainHeavyCombi(stair, main.aptitude.pow, main.aptitude.lif)
+            }}
           </td>
           <td>
-            {{ culcTrainHeavyCombi(stair, main.spd_apt, main.int_apt) }}
+            {{
+              culcTrainHeavyCombi(stair, main.aptitude.spd, main.aptitude.int)
+            }}
           </td>
         </tr>
         <tr>
@@ -76,10 +80,14 @@
         </tr>
         <tr>
           <td>
-            {{ culcTrainHeavyCombi(stair, main.int_apt, main.ski_apt) }}
+            {{
+              culcTrainHeavyCombi(stair, main.aptitude.int, main.aptitude.ski)
+            }}
           </td>
           <td>
-            {{ culcTrainHeavyCombi(stair, main.def_apt, main.lif_apt) }}
+            {{
+              culcTrainHeavyCombi(stair, main.aptitude.def, main.aptitude.lif)
+            }}
           </td>
         </tr>
       </tbody>
@@ -153,13 +161,14 @@ export default {
       const heavyMain = function (val) {
         return Math.min(Math.max(val, 3), 20);
       };
-      const heavySub = function (val) {
-        return Math.max(val, 2);
-      };
       const training_heavy_main = Object.values(
         trainingData.training_heavy_main
       );
       const main_maxup = training_heavy_main[aptitude_main][stage];
+
+      const heavySub = function (val) {
+        return Math.max(val, 2);
+      };
       const training_heavy_sub = Object.values(trainingData.training_heavy_sub);
       const sub_maxup = training_heavy_sub[aptitude_sub][stage];
 
