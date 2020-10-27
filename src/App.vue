@@ -147,7 +147,9 @@ export default {
       this.main.grow_type = monsterData.grow_type;
       this.main.lifespan = monsterData.lifespan;
       this.main.aptitude = monsterData.aptitude;
-      this.$refs.training.setSkilled(monsterData.skilled);
+      this.$refs.training.setSkilled(
+        JSON.parse(JSON.stringify(monsterData.skilled))
+      );
     }
   }
 };
