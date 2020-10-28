@@ -14,20 +14,19 @@
         </option>
       </select>
       モンスター名：
-      <select>
-        <option v-for="data in selector_names.name" :key="data">
+      <select v-model="selector_monster" @change="setPresetName()">
+        <option v-for="data in selector_name.name" :key="data">
           {{ data }}
         </option>
       </select>
-      <span>※列挙のみを実装（現在無意味</span>
     </p>
     <p>
       プリセット呼び出し：
-      <select v-model="main.monster_id">
+      <select v-model="main.preset_monster">
         <option
-          v-for="monster in monster_preset"
-          :key="monster.no"
-          :value="monster.no"
+          v-for="monster in monster_presets"
+          :key="monster.name"
+          :value="monster.name"
         >
           No.{{ monster.no }}:{{ monster.name }}
         </option>
@@ -90,6 +89,7 @@
 import myheader from './components/myheader';
 import training from './components/training';
 import monster_names from '../assets/monster_kind.json';
+import monster_datas from '../assets/monster_data.json';
 
 export default {
   components: {
@@ -100,13 +100,14 @@ export default {
     return {
       // 各種初期値
       selector_kind: 0,
-      selector_names: {},
+      selector_name: {},
+      selector_monster: 'ピクシー',
+      monster_presets: {},
       // 各種初期値(子に引き渡す用)
       main: {
         lifespan: '300',
-        monster_id: 409,
+        preset_monster: 'ピクシー',
         grow_type: 2,
-        selection: 0,
         stair: 0,
         aptitude: {
           lif: 2,
@@ -115,46 +116,8 @@ export default {
           ski: 2,
           spd: 2,
           def: 2
-        },
-        skilled: {}
-      },
-      // データ形式考えるための仮実装。実際にどう載せてどう使うかは今後考える
-      monster_preset: [
-        {
-          name: 'シロゾー',
-          no: 408,
-          lifespan: '350',
-          grow_type: 3,
-          aptitude: {
-            lif: 2,
-            pow: 2,
-            int: 0,
-            ski: 0,
-            spd: 2,
-            def: 2
-          },
-          skilled: {
-            swim: 1
-          }
-        },
-        {
-          name: 'シロモッチー',
-          no: 409,
-          lifespan: '340',
-          grow_type: 3,
-          aptitude: {
-            lif: 2,
-            pow: 2,
-            int: 2,
-            ski: 1,
-            spd: 1,
-            def: 1
-          },
-          skilled: {
-            pull: 1
-          }
         }
-      ],
+      },
       // 成長適性
       pattern: ['A', 'B', 'C', 'D', 'E'],
       // 成長タイプ
@@ -201,7 +164,8 @@ export default {
         'ナーガ',
         '（ノラモン）'
       ],
-      monster_names: monster_names
+      monster_names: monster_names,
+      monster_datas: monster_datas
     };
   },
   mounted: function () {
@@ -209,20 +173,46 @@ export default {
   },
   methods: {
     setSelectorName() {
-      this.selector_names = this.monster_names[this.selector_kind];
+      this.selector_name = this.monster_names[this.selector_kind];
+      this.selector_monster = this.selector_name.type; // 純血種を指定 ノラモンはご愛敬
+      this.setPresetName();
+    },
+    setPresetName() {
+      const monsterName = this.selector_monster;
+      let monsterData = this.monster_datas.filter(function (item) {
+        if (item.name.indexOf(monsterName) === 0) return true;
+      });
+      if (monsterData.length === 0) monsterData = monster_datas; // 応急処置
+      this.monster_presets = monsterData;
+      this.main.preset_monster = monsterName;
     },
     setMonster() {
-      const monsterId = this.main.monster_id;
-      const monsterData = this.monster_preset.filter(function (item) {
-        if (item.no === monsterId) return true;
+      const monsterName = this.main.preset_monster;
+      const monsterData = this.monster_datas.filter(function (item) {
+        if (item.name === monsterName) return true;
       })[0];
       this.main.lifespan = monsterData.lifespan;
-      this.main.grow_type = monsterData.grow_type;
+      this.main.grow_type = this.type.indexOf(monsterData.grow_type);
       this.main.lifespan = monsterData.lifespan;
-      this.main.aptitude = JSON.parse(JSON.stringify(monsterData.aptitude));
-      this.$refs.training.setSkilled(
-        JSON.parse(JSON.stringify(monsterData.skilled))
+      this.main.aptitude.lif = this.pattern.indexOf(
+        monsterData.lif.split(',')[0]
       );
+      this.main.aptitude.pow = this.pattern.indexOf(
+        monsterData.pow.split(',')[0]
+      );
+      this.main.aptitude.int = this.pattern.indexOf(
+        monsterData.int.split(',')[0]
+      );
+      this.main.aptitude.ski = this.pattern.indexOf(
+        monsterData.ski.split(',')[0]
+      );
+      this.main.aptitude.spd = this.pattern.indexOf(
+        monsterData.spd.split(',')[0]
+      );
+      this.main.aptitude.def = this.pattern.indexOf(
+        monsterData.def.split(',')[0]
+      );
+      this.$refs.training.setSkilled(monsterData.skilled);
     }
   }
 };

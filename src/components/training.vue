@@ -37,12 +37,12 @@
         <tr>
           <td>
             ドミノ倒し
-            <input type="checkbox" id="domino" v-model="skilled.domino" />
+            <input id="domino" v-model="skilled.domino" type="checkbox" />
             <label for="domino">得意</label>
           </td>
           <td>
             しゃてき
-            <input type="checkbox" id="shoot" v-model="skilled.shoot" />
+            <input id="shoot" v-model="skilled.shoot" type="checkbox" />
             <label for="shoot">得意</label>
           </td>
         </tr>
@@ -53,12 +53,12 @@
         <tr>
           <td>
             猛勉強
-            <input type="checkbox" id="study" v-model="skilled.study" />
+            <input v-model="skilled.study" type="checkbox" />
             <label for="study">得意</label>
           </td>
           <td>
             巨石よけ
-            <input type="checkbox" id="dodge" v-model="skilled.dodge" />
+            <input id="dodge" v-model="skilled.dodge" type="checkbox" />
             <label for="dodge">得意</label>
           </td>
         </tr>
@@ -69,12 +69,12 @@
         <tr>
           <td>
             走り込み
-            <input type="checkbox" id="run" v-model="skilled.run" />
+            <input id="run" v-model="skilled.run" type="checkbox" />
             <label for="run">得意</label>
           </td>
           <td>
             丸太うけ
-            <input type="checkbox" id="endure" v-model="skilled.endure" />
+            <input id="endure" v-model="skilled.endure" type="checkbox" />
             <label for="endure">得意</label>
           </td>
         </tr>
@@ -85,12 +85,12 @@
         <tr>
           <td>
             重り引き
-            <input type="checkbox" id="pull" v-model="skilled.pull" />
+            <input id="pull" v-model="skilled.pull" type="checkbox" />
             <label for="pull">得意</label>
           </td>
           <td>
             変動ゆか
-            <input type="checkbox" id="leap" v-model="skilled.leap" />
+            <input id="leap" v-model="skilled.leap" type="checkbox" />
             <label for="leap">得意</label>
           </td>
         </tr>
@@ -101,12 +101,12 @@
         <tr>
           <td>
             めいそう
-            <input type="checkbox" id="meditate" v-model="skilled.meditate" />
+            <input id="meditate" v-model="skilled.meditate" type="checkbox" />
             <label for="meditate">得意</label>
           </td>
           <td>
             プール
-            <input type="checkbox" id="swim" v-model="skilled.swim" />
+            <input id="swim" v-model="skilled.swim" type="checkbox" />
             <label for="swim">得意</label>
           </td>
         </tr>
@@ -323,8 +323,16 @@ export default {
       return return_array;
     },
     // プリセット反映用（親から呼ばれる）
-    setSkilled(objSkilled) {
-      this.skilled = objSkilled;
+    setSkilled(strSkilled) {
+      let skilledList = {};
+
+      // 実際は文字長0でも空白文字列キーの謎プロパティができるだけなのだが一応処理
+      if (strSkilled.length !== 0) {
+        for (const name of strSkilled.split(',')) {
+          skilledList[name] = 1;
+        }
+      }
+      this.skilled = skilledList;
     }
   }
 };
