@@ -1,6 +1,7 @@
 <template>
   <div>
     <myheader></myheader>
+    <hr />
     <p>
       プリセット呼び出し：
       <select v-model="main.monster_id">
@@ -62,7 +63,7 @@
         </option>
       </select>
     </p>
-    <training :main="main" ref="training"></training>
+    <training ref="training" :main="main"></training>
   </div>
 </template>
 

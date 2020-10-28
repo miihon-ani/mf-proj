@@ -37,13 +37,13 @@
         <tr>
           <td>
             ドミノ倒し
-            <input type="checkbox" v-model="skilled.domino" />
-            <label>得意</label>
+            <input type="checkbox" id="domino" v-model="skilled.domino" />
+            <label for="domino">得意</label>
           </td>
           <td>
             しゃてき
-            <input type="checkbox" v-model="skilled.shoot" />
-            <label>得意</label>
+            <input type="checkbox" id="shoot" v-model="skilled.shoot" />
+            <label for="shoot">得意</label>
           </td>
         </tr>
         <tr>
@@ -53,13 +53,13 @@
         <tr>
           <td>
             猛勉強
-            <input type="checkbox" v-model="skilled.study" />
-            <label>得意</label>
+            <input type="checkbox" id="study" v-model="skilled.study" />
+            <label for="study">得意</label>
           </td>
           <td>
             巨石よけ
-            <input type="checkbox" v-model="skilled.dodge" />
-            <label>得意</label>
+            <input type="checkbox" id="dodge" v-model="skilled.dodge" />
+            <label for="dodge">得意</label>
           </td>
         </tr>
         <tr>
@@ -69,13 +69,13 @@
         <tr>
           <td>
             走り込み
-            <input type="checkbox" v-model="skilled.run" />
-            <label>得意</label>
+            <input type="checkbox" id="run" v-model="skilled.run" />
+            <label for="run">得意</label>
           </td>
           <td>
             丸太うけ
-            <input type="checkbox" v-model="skilled.endure" />
-            <label>得意</label>
+            <input type="checkbox" id="endure" v-model="skilled.endure" />
+            <label for="endure">得意</label>
           </td>
         </tr>
         <tr>
@@ -85,13 +85,13 @@
         <tr>
           <td>
             重り引き
-            <input type="checkbox" v-model="skilled.pull" />
-            <label>得意</label>
+            <input type="checkbox" id="pull" v-model="skilled.pull" />
+            <label for="pull">得意</label>
           </td>
           <td>
             変動ゆか
-            <input type="checkbox" v-model="skilled.leap" />
-            <label>得意</label>
+            <input type="checkbox" id="leap" v-model="skilled.leap" />
+            <label for="leap">得意</label>
           </td>
         </tr>
         <tr>
@@ -101,13 +101,13 @@
         <tr>
           <td>
             めいそう
-            <input type="checkbox" v-model="skilled.meditate" />
-            <label>得意</label>
+            <input type="checkbox" id="meditate" v-model="skilled.meditate" />
+            <label for="meditate">得意</label>
           </td>
           <td>
             プール
-            <input type="checkbox" v-model="skilled.swim" />
-            <label>得意</label>
+            <input type="checkbox" id="swim" v-model="skilled.swim" />
+            <label for="swim">得意</label>
           </td>
         </tr>
         <tr>
