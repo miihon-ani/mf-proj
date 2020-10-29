@@ -103,7 +103,7 @@ export default {
       selector_name: {},
       selector_monster: 'ピクシー',
       monster_presets: {},
-      // 各種初期値(子に引き渡す用)
+      // (子に引き渡す用)
       main: {
         lifespan: '300',
         preset_monster: 'ピクシー',
@@ -174,7 +174,7 @@ export default {
   methods: {
     setSelectorName() {
       this.selector_name = this.monster_names[this.selector_kind];
-      this.selector_monster = this.selector_name.type; // 純血種を指定 ノラモンはご愛敬
+      this.selector_monster = this.selector_name.name[0];
       this.setPresetName();
     },
     setPresetName() {
@@ -194,24 +194,12 @@ export default {
       this.main.lifespan = monsterData.lifespan;
       this.main.grow_type = this.type.indexOf(monsterData.grow_type);
       this.main.lifespan = monsterData.lifespan;
-      this.main.aptitude.lif = this.pattern.indexOf(
-        monsterData.lif.split(',')[0]
-      );
-      this.main.aptitude.pow = this.pattern.indexOf(
-        monsterData.pow.split(',')[0]
-      );
-      this.main.aptitude.int = this.pattern.indexOf(
-        monsterData.int.split(',')[0]
-      );
-      this.main.aptitude.ski = this.pattern.indexOf(
-        monsterData.ski.split(',')[0]
-      );
-      this.main.aptitude.spd = this.pattern.indexOf(
-        monsterData.spd.split(',')[0]
-      );
-      this.main.aptitude.def = this.pattern.indexOf(
-        monsterData.def.split(',')[0]
-      );
+      this.main.aptitude.lif = this.pattern.indexOf(monsterData.lif_apt);
+      this.main.aptitude.pow = this.pattern.indexOf(monsterData.pow_apt);
+      this.main.aptitude.int = this.pattern.indexOf(monsterData.int_apt);
+      this.main.aptitude.ski = this.pattern.indexOf(monsterData.ski_apt);
+      this.main.aptitude.spd = this.pattern.indexOf(monsterData.spd_apt);
+      this.main.aptitude.def = this.pattern.indexOf(monsterData.def_apt);
       this.$refs.training.setSkilled(monsterData.skilled);
     }
   }
