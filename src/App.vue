@@ -22,7 +22,7 @@
     </p>
     <p>
       プリセット呼び出し：
-      <select v-model="main.preset_monster">
+      <select v-model="main.preset_monster" @change="setPresetMessage()">
         <option
           v-for="monster in monster_presets"
           :key="monster.name"
@@ -32,7 +32,7 @@
         </option>
       </select>
       <button @click="setMonster()">反映する</button>
-      <span>※一部のみテスト用データとして実装中</span>
+      <span>{{ preset_message }}</span>
     </p>
     <p>
       寿命：<input v-model="main.lifespan" type="number" />
@@ -103,6 +103,7 @@ export default {
       selector_name: {},
       selector_monster: 'ピクシー',
       monster_presets: {},
+      preset_message: '',
       // (子に引き渡す用)
       main: {
         lifespan: '300',
@@ -177,14 +178,22 @@ export default {
       this.selector_monster = this.selector_name.name[0];
       this.setPresetName();
     },
+    setPresetMessage() {
+      this.preset_message = '';
+      const monsterName = this.main.preset_monster;
+      const message = this.monster_datas.filter(function (item) {
+        if (item.name === monsterName) return true;
+      })[0].memo; // １つしか引っかからないはず
+      if (message.length !== 0) this.preset_message = '※ ' + message;
+    },
     setPresetName() {
       const monsterName = this.selector_monster;
-      let monsterData = this.monster_datas.filter(function (item) {
+      const monsterData = this.monster_datas.filter(function (item) {
         if (item.name.indexOf(monsterName) === 0) return true;
       });
-      if (monsterData.length === 0) monsterData = monster_datas; // 応急処置
       this.monster_presets = monsterData;
       this.main.preset_monster = monsterName;
+      this.setPresetMessage();
     },
     setMonster() {
       const monsterName = this.main.preset_monster;
