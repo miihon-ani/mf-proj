@@ -184,7 +184,7 @@ export default {
       const message = this.monster_datas.filter(function (item) {
         if (item.name === monsterName) return true;
       })[0].memo; // １つしか引っかからないはず
-      if (message.length !== 0) this.preset_message = '※ ' + message;
+      if (message.length !== 0) this.preset_message = ' ※' + message;
     },
     setPresetName() {
       const monsterName = this.selector_monster;
