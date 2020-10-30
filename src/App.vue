@@ -1,14 +1,12 @@
 <template>
   <div>
     <div>
-      <p @click="toggleTest()">
-        Monster Farm 2 いろいろ計算機（にしたい）v0.2.2
-      </p>
-      <p>
-        バグ報告などはTwitter:
-        <a href="https://twitter.com/miihon_ani">miihon_ani</a>
-        まで
-      </p>
+      Monster Farm 2 いろいろ計算機（にしたい）
+      <span @click="toggleTest()">v0.2.2</span>
+      <br />
+      バグ報告などはTwitter:
+      <a href="https://twitter.com/miihon_ani">miihon_ani</a>
+      まで
     </div>
     <hr />
     <p>
@@ -96,12 +94,14 @@
       ref="training"
       :main="main"
     ></training>
-    <changelog v-if="active_display === false"></changelog>
+    <div @click="toggleTest()">
+      <changelog v-if="active_display === false"></changelog>
+    </div>
   </div>
 </template>
 
 <script>
-import myheader from './components/myheader';
+// import myheader from './components/myheader';
 import training from './components/training';
 import changelog from './components/changelog';
 
