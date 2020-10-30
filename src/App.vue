@@ -1,6 +1,15 @@
 <template>
   <div>
-    <myheader></myheader>
+    <div>
+      <p @click="toggleTest()">
+        Monster Farm 2 いろいろ計算機（にしたい）v0.2.2
+      </p>
+      <p>
+        バグ報告などはTwitter:
+        <a href="https://twitter.com/miihon_ani">miihon_ani</a>
+        まで
+      </p>
+    </div>
     <hr />
     <p>
       種族：
@@ -81,24 +90,34 @@
         </option>
       </select>
     </p>
-    <training ref="training" :main="main"></training>
+    <hr />
+    <training
+      v-if="active_display === true"
+      ref="training"
+      :main="main"
+    ></training>
+    <changelog v-if="active_display === false"></changelog>
   </div>
 </template>
 
 <script>
 import myheader from './components/myheader';
 import training from './components/training';
+import changelog from './components/changelog';
+
 import monster_names from '../assets/monster_kind.json';
 import monster_datas from '../assets/monster_data.json';
 
 export default {
   components: {
-    myheader,
-    training
+    // myheader,
+    training,
+    changelog
   },
   data() {
     return {
       // 各種初期値
+      active_display: true,
       selector_kind: 0,
       selector_name: {},
       selector_monster: 'ピクシー',
@@ -173,6 +192,9 @@ export default {
     this.setSelectorName();
   },
   methods: {
+    toggleTest() {
+      this.active_display = !this.active_display;
+    },
     setSelectorName() {
       this.selector_name = this.monster_names[this.selector_kind];
       this.selector_monster = this.selector_name.name[0];
@@ -196,6 +218,7 @@ export default {
       this.setPresetMessage();
     },
     setMonster() {
+      if (!this.active_display) return true; // 暫定。第二画面以降への切替作ったら表示ごとに処理変える
       const monsterName = this.main.preset_monster;
       const monsterData = this.monster_datas.filter(function (item) {
         if (item.name === monsterName) return true;
