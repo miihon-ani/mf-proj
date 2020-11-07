@@ -90,18 +90,17 @@
     </p>
     <hr />
     <training
-      v-if="active_display === true"
+      v-if="active_display === 'training'"
       ref="training"
       :main="main"
     ></training>
     <div @click="toggleTest()">
-      <changelog v-if="active_display === false"></changelog>
+      <changelog v-if="active_display === 'changelog'"></changelog>
     </div>
   </div>
 </template>
 
 <script>
-// import myheader from './components/myheader';
 import training from './components/training';
 import changelog from './components/changelog';
 
@@ -110,14 +109,13 @@ import monster_datas from '../assets/monster_data.json';
 
 export default {
   components: {
-    // myheader,
     training,
     changelog
   },
   data() {
     return {
       // 各種初期値
-      active_display: true,
+      active_display: 'training',
       selector_kind: 0,
       selector_name: {},
       selector_monster: 'ピクシー',
@@ -193,7 +191,8 @@ export default {
   },
   methods: {
     toggleTest() {
-      this.active_display = !this.active_display;
+      if (this.active_display === 'training') this.active_display = 'changelog';
+      else this.active_display = 'training';
     },
     setSelectorName() {
       this.selector_name = this.monster_names[this.selector_kind];
@@ -218,7 +217,7 @@ export default {
       this.setPresetMessage();
     },
     setMonster() {
-      if (!this.active_display) return true; // 暫定。第二画面以降への切替作ったら表示ごとに処理変える
+      if (this.active_display === 'changelog') return true; // 暫定。第二画面以降への切替作ったら表示ごとに処理変える
       const monsterName = this.main.preset_monster;
       const monsterData = this.monster_datas.filter(function (item) {
         if (item.name === monsterName) return true;

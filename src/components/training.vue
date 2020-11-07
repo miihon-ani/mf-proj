@@ -19,7 +19,7 @@
     <table v-if="main.lifespan.length > 0">
       <thead>
         <tr>
-          <td>トレーニング</td>
+          <td @click="changeSecret(main.aptitude)">トレーニング</td>
           <td colspan="3">
             <select v-model="stair">
               <option
@@ -117,14 +117,19 @@
       </tbody>
     </table>
     <p v-else>(寿命が入力されていません))</p>
+    <myheader v-if="secret === true">まだ何もないよ（</myheader>
   </div>
 </template>
 
 <script>
+import myheader from '../components/myheader';
 import trainingData from '../../assets/training.json';
 
 export default {
   name: 'Training',
+  components: {
+    myheader
+  },
   props: {
     main: {
       type: Object,
@@ -137,6 +142,7 @@ export default {
       // 初期設定
       stair: 4,
       trainingData: trainingData,
+      secret: false,
       skilled: {},
       // 成長段階
       grow_stages: [
@@ -161,6 +167,13 @@ export default {
     };
   },
   methods: {
+    changeSecret(apt) {
+      const checkArr = Object.keys(apt).map(function (key) {
+        return apt[key];
+      });
+      if (this.main.lifespan !== '555') return true;
+      if (JSON.stringify(checkArr) === '[3,4,2,0,3,4]') this.secret = true;
+    },
     // 段階変更
     changeStair(stage) {
       if (stage > 10) return 'えらー';
