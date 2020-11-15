@@ -16,7 +16,7 @@
         </tr>
       </tbody>
     </table>
-    <table v-if="main.lifespan.length > 0">
+    <table v-if="main.lifespan > 0">
       <thead>
         <tr>
           <td @click="changeSecret(main.aptitude)">トレーニング</td>
@@ -117,7 +117,7 @@
       </tbody>
     </table>
     <p v-else>(寿命が入力されていません))</p>
-    <myheader v-if="secret === true">まだ何もないよ（</myheader>
+    <myheader v-if="secret === true"></myheader>
   </div>
 </template>
 

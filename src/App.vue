@@ -2,107 +2,113 @@
   <div>
     <div>
       Monster Farm 2 いろいろ計算機（にしたい）
-      <span @click="toggleTest()">v0.2.2</span>
+      <span @click="toggleChangeLog()" class="display">v0.3.0β</span>
+      ：{{ active_display }}
       <br />
       バグ報告などはTwitter:
       <a href="https://twitter.com/miihon_ani">miihon_ani</a>
       まで
     </div>
+    <span class="display" @click="changeDisplay('detail')">モンスター詳細</span>
+    /
+    <span class="display" @click="changeDisplay('training')">トレーニング</span>
     <hr />
-    <p>
-      種族：
-      <select v-model="selector_kind" @change="setSelectorName()">
-        <option
-          v-for="(data, index) in monster_kinds"
-          :key="index"
-          :value="index"
-        >
-          {{ data }}
-        </option>
-      </select>
-      モンスター名：
-      <select v-model="selector_monster" @change="setPresetName()">
-        <option v-for="data in selector_name.name" :key="data">
-          {{ data }}
-        </option>
-      </select>
-    </p>
-    <p>
-      プリセット呼び出し：
-      <select v-model="main.preset_monster" @change="setPresetMessage()">
-        <option
-          v-for="monster in monster_presets"
-          :key="monster.name"
-          :value="monster.name"
-        >
-          No.{{ monster.no }}:{{ monster.name }}
-        </option>
-      </select>
-      <button @click="setMonster()">反映する</button>
-      <span>{{ preset_message }}</span>
-    </p>
-    <p>
-      寿命：<input v-model="main.lifespan" type="number" />
-      成長タイプ：
-      <select v-model="main.grow_type">
-        <option v-for="(data, index) in type" :key="index" :value="index">
-          {{ data }}
-        </option>
-      </select>
-    </p>
-    <p>
-      成長適正：ライフ
-      <select v-model="main.aptitude.lif">
-        <option v-for="(data, index) in pattern" :key="index" :value="index">
-          {{ data }}
-        </option>
-      </select>
-      ちから
-      <select v-model="main.aptitude.pow">
-        <option v-for="(data, index) in pattern" :key="index" :value="index">
-          {{ data }}
-        </option>
-      </select>
-      かしこさ
-      <select v-model="main.aptitude.int">
-        <option v-for="(data, index) in pattern" :key="data" :value="index">
-          {{ data }}
-        </option>
-      </select>
-      命中
-      <select v-model="main.aptitude.ski">
-        <option v-for="(data, index) in pattern" :key="index" :value="index">
-          {{ data }}
-        </option>
-      </select>
-      回避
-      <select v-model="main.aptitude.spd">
-        <option v-for="(data, index) in pattern" :key="index" :value="index">
-          {{ data }}
-        </option>
-      </select>
-      丈夫さ
-      <select v-model="main.aptitude.def">
-        <option v-for="(data, index) in pattern" :key="index" :value="index">
-          {{ data }}
-        </option>
-      </select>
-    </p>
+    種族：
+    <select v-model="selector_kind" @change="setSelectorName()">
+      <option
+        v-for="(data, index) in monster_kinds"
+        :key="index"
+        :value="index"
+      >
+        {{ data }}
+      </option>
+    </select>
+    モンスター名：
+    <select v-model="selector_monster" @change="setPresetName()">
+      <option v-for="data in selector_name.name" :key="data">
+        {{ data }}
+      </option>
+    </select>
+    <br />
+    プリセット呼び出し：
+    <select v-model="main.preset_monster" @change="setPresetMessage()">
+      <option
+        v-for="monster in monster_presets"
+        :key="monster.name"
+        :value="monster.name"
+      >
+        No.{{ monster.no }}:{{ monster.name }}
+      </option>
+    </select>
+    <button @click="setMonster()">反映する</button>
+    <span>{{ preset_message }}</span>
+    <hr />
+    寿命：<input v-model="main.lifespan" type="number" />
+    成長タイプ：
+    <select v-model="main.grow_type">
+      <option v-for="(data, index) in type" :key="index" :value="index">
+        {{ data }}
+      </option>
+    </select>
+    <br />
+    成長適正：ライフ
+    <select v-model="main.aptitude.lif">
+      <option v-for="(data, index) in pattern" :key="index" :value="index">
+        {{ data }}
+      </option>
+    </select>
+    ちから
+    <select v-model="main.aptitude.pow">
+      <option v-for="(data, index) in pattern" :key="index" :value="index">
+        {{ data }}
+      </option>
+    </select>
+    かしこさ
+    <select v-model="main.aptitude.int">
+      <option v-for="(data, index) in pattern" :key="data" :value="index">
+        {{ data }}
+      </option>
+    </select>
+    命中
+    <select v-model="main.aptitude.ski">
+      <option v-for="(data, index) in pattern" :key="index" :value="index">
+        {{ data }}
+      </option>
+    </select>
+    回避
+    <select v-model="main.aptitude.spd">
+      <option v-for="(data, index) in pattern" :key="index" :value="index">
+        {{ data }}
+      </option>
+    </select>
+    丈夫さ
+    <select v-model="main.aptitude.def">
+      <option v-for="(data, index) in pattern" :key="index" :value="index">
+        {{ data }}
+      </option>
+    </select>
     <hr />
     <training
       v-if="active_display === 'training'"
       ref="training"
       :main="main"
     ></training>
-    <div @click="toggleTest()">
+    <detail
+      v-if="active_display === 'detail'"
+      ref="detail"
+      :main="main"
+    ></detail>
+    <div>
       <changelog v-if="active_display === 'changelog'"></changelog>
     </div>
   </div>
 </template>
 
 <script>
+// 画面名とファイル名は同一にすること 現在３画面
 import training from './components/training';
 import changelog from './components/changelog';
+import detail from './components/detail';
 
 import monster_names from '../assets/monster_kind.json';
 import monster_datas from '../assets/monster_data.json';
@@ -110,12 +116,14 @@ import monster_datas from '../assets/monster_data.json';
 export default {
   components: {
     training,
-    changelog
+    changelog,
+    detail
   },
   data() {
     return {
       // 各種初期値
-      active_display: 'training',
+      active_display: 'changelog',
+      history_display: 'training',
       selector_kind: 0,
       selector_name: {},
       selector_monster: 'ピクシー',
@@ -190,9 +198,14 @@ export default {
     this.setSelectorName();
   },
   methods: {
-    toggleTest() {
-      if (this.active_display === 'training') this.active_display = 'changelog';
-      else this.active_display = 'training';
+    changeDisplay(disp) {
+      this.active_display = disp;
+    },
+    toggleChangeLog() {
+      if (this.active_display !== 'changelog') {
+        this.history_display = this.active_display;
+        this.active_display = 'changelog';
+      } else this.active_display = this.history_display;
     },
     setSelectorName() {
       this.selector_name = this.monster_names[this.selector_kind];
@@ -217,7 +230,7 @@ export default {
       this.setPresetMessage();
     },
     setMonster() {
-      if (this.active_display === 'changelog') return true; // 暫定。第二画面以降への切替作ったら表示ごとに処理変える
+      // 共通処理
       const monsterName = this.main.preset_monster;
       const monsterData = this.monster_datas.filter(function (item) {
         if (item.name === monsterName) return true;
@@ -231,8 +244,20 @@ export default {
       this.main.aptitude.ski = this.pattern.indexOf(monsterData.ski_apt);
       this.main.aptitude.spd = this.pattern.indexOf(monsterData.spd_apt);
       this.main.aptitude.def = this.pattern.indexOf(monsterData.def_apt);
-      this.$refs.training.setSkilled(monsterData.skilled);
+
+      // トレーニング画面時：トレーニング側での処理を呼ぶ
+      if (this.active_display === 'training')
+        this.$refs.training.setSkilled(monsterData.skilled);
+      // 詳細画面時：詳細側での処理を呼ぶ
+      if (this.active_display === 'detail') this.$refs.detail.setDetail();
+      // 更新履歴画面時：直前の画面に遷移して処理…したいがディレイかけないと関数が呼べないので保留(TODO)
     }
   }
 };
 </script>
+<style>
+.display {
+  color: blue;
+  text-decoration: underline;
+}
+</style>
