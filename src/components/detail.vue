@@ -131,7 +131,7 @@ export default {
       if (monsterData.skilled.length === 0) monsterData.skilled = '（なし）';
 
       this.detailed_monster = monsterData;
-      const corrected_param = this.calcCorrectedParam(monsterData);
+      const corrected_param = this.calcBirthParam(monsterData);
       const sorted_param = corrected_param.slice().sort(function (a, b) {
         return b - a;
       });
@@ -149,7 +149,7 @@ export default {
         }
       }
     },
-    // 補正後パラメータが同一だった場合の判定
+    // 補正後パラメータが同一だった場合の判定（初期値＞並び降順）
     judgeSameParam(sorted_param, dupeVal) {
       const position = this.sorted_param_index.length; // 現在位置
       const dupe_origin = sorted_param.indexOf(dupeVal); // 重複の開始位置
@@ -185,8 +185,8 @@ export default {
 
       let return_msg = '';
       for (let index of sorted_param_index)
-        return_msg += this.params[index] + '(' + corrected_param[index] + ')';
-      return return_msg;
+        return_msg += this.params[index] + '(' + corrected_param[index] + ')＞';
+      return return_msg.slice(0, -1);
     },
     // モンスターデータからパラメータ配列を作成
     setParam(data) {
@@ -232,6 +232,18 @@ export default {
       retArr.push(
         Math.trunc(data.def * this.pattern.indexOf(data.def_apt) * 0.5)
       );
+      return retArr;
+    },
+    // 合体誕生時のパラメータを計算する（適性のほうが優位）
+    // TODO:set系使って書き直したい
+    calcBirthParam(data) {
+      let retArr = new Array();
+      retArr.push(this.pattern.indexOf(data.lif_apt));
+      retArr.push(this.pattern.indexOf(data.pow_apt));
+      retArr.push(this.pattern.indexOf(data.int_apt));
+      retArr.push(this.pattern.indexOf(data.ski_apt));
+      retArr.push(this.pattern.indexOf(data.spd_apt));
+      retArr.push(this.pattern.indexOf(data.def_apt));
       return retArr;
     }
   }

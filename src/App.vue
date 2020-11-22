@@ -2,7 +2,7 @@
   <div>
     <div>
       Monster Farm 2 いろいろ計算機（にしたい）
-      <span @click="toggleChangeLog()" class="display">v0.3.0β</span>
+      <span @click="toggleChangeLog()" class="display">v0.3.0β2</span>
       ：{{ active_display }}
       <br />
       バグ報告などはTwitter:
